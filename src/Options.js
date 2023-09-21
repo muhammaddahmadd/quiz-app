@@ -1,5 +1,5 @@
 function Options({ ques, answer, dispatch }) {
-  const hasAnswered = answer !== null;
+  const hasAnswered = answer !== null; // to make sure the user has answered
 
   return (
     <div className="options">
@@ -14,7 +14,7 @@ function Options({ ques, answer, dispatch }) {
           }`}
           disabled={hasAnswered}
           key={options}
-          onClick={() => dispatch({ type: "newAns", payload: index })}
+          onClick={() => dispatch({ type: "newAns", payload: index })} // index to keep track of the current option which is being clicked
         >
           {options}
         </button>

@@ -5,6 +5,8 @@ import Loader from "./Loader";
 import Error from "./Error";
 import StartScreen from "./StartScreen";
 import Question from "./Question";
+import Button from "./Button";
+import Progress from "./Progress";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -15,7 +17,7 @@ function reducer(state, action) {
     case "start":
       return { ...state, status: "active" };
     case "newAns":
-      const question = state.questions.at(state.index);
+      const question = state.questions.at(state.index); // finds the index of current question
 
       return {
         ...state,
@@ -25,6 +27,9 @@ function reducer(state, action) {
             ? state.points + question.points
             : state.points,
       };
+    case "nextQs":
+      return { ...state, index: state.index++, answer: null }; // setting the answer back to null to reset it
+
     default:
       throw new Error("Error occured");
   }
@@ -45,6 +50,7 @@ function App() {
   );
   const questionCount = questions.length;
 
+  const totalPoints = questions.reduce((acc, cur) => acc + cur.points, 0);
   useEffect(function () {
     fetch("http://localhost:8000/questions")
       .then((res) => res.json(null))
@@ -62,11 +68,22 @@ function App() {
           <StartScreen numofqs={questionCount} dispatch={dispatch} />
         )}
         {status === "active" && (
-          <Question
-            ques={questions[index]}
-            answer={answer}
-            dispatch={dispatch}
-          />
+          <>
+            <Progress
+              points={points}
+              totalPoints={totalPoints}
+              numofqs={questionCount}
+              index={index}
+              answer={answer}
+            />
+            <Question
+              ques={questions[index]}
+              answer={answer}
+              dispatch={dispatch}
+              points={points}
+            />
+            <Button dispatch={dispatch} answer={answer} />
+          </>
         )}
       </Main>
     </div>
