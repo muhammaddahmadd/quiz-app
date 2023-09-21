@@ -8,8 +8,9 @@ import Question from "./Question";
 import Button from "./Button";
 import Progress from "./Progress";
 import Ended from "./Ended";
-import Restart from "./Restart";
-
+import Footer from "./Footer";
+import Timer from "./Timer";
+import DarkModeToggle from "./DarkModeToggle";
 const initialState = {
   questions: [],
   status: "loading",
@@ -17,7 +18,9 @@ const initialState = {
   answer: null,
   points: 0,
   highscore: 0,
+  seconds: null,
 };
+const SecPerQ = 30;
 function reducer(state, action) {
   switch (action.type) {
     case "dataFetched":
@@ -25,7 +28,11 @@ function reducer(state, action) {
     case "fetchfailed":
       return { ...state, status: "error" };
     case "start":
-      return { ...state, status: "active" };
+      return {
+        ...state,
+        status: "active",
+        seconds: state.questions.length * SecPerQ,
+      };
     case "newAns":
       const question = state.questions.at(state.index); // finds the index of current question
 
@@ -55,15 +62,22 @@ function reducer(state, action) {
         points: 0,
         highscore: 0,
       };
-
+    case "tick":
+      return {
+        ...state,
+        seconds: state.seconds - 1,
+        status: state.seconds === 0 ? "ended" : state.status,
+      };
     default:
       throw new Error("Error occured");
   }
 }
 
 function App() {
-  const [{ questions, status, index, answer, points, highscore }, dispatch] =
-    useReducer(reducer, initialState);
+  const [
+    { questions, status, index, answer, points, highscore, seconds },
+    dispatch,
+  ] = useReducer(reducer, initialState);
   const questionCount = questions.length;
 
   const totalPoints = questions.reduce((acc, cur) => acc + cur.points, 0);
@@ -76,6 +90,7 @@ function App() {
 
   return (
     <div className="app">
+      <DarkModeToggle />
       <Header />
       <Main>
         {status === "loading" && <Loader />}
@@ -98,12 +113,15 @@ function App() {
               dispatch={dispatch}
               points={points}
             />
-            <Button
-              dispatch={dispatch}
-              answer={answer}
-              numofqs={questionCount}
-              index={index}
-            />
+            <Footer>
+              <Timer seconds={seconds} dispatch={dispatch} />
+              <Button
+                dispatch={dispatch}
+                answer={answer}
+                numofqs={questionCount}
+                index={index}
+              />
+            </Footer>
           </>
         )}
         {status === "ended" && (
