@@ -14,7 +14,7 @@ function Timer({ dispatch, seconds }) {
     [dispatch]
   );
   return (
-    <p className="timer">
+    <p className="timer timer-blink">
       {min}:{secs < 10 && "0"}
       {secs}
     </p>

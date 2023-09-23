@@ -32,9 +32,9 @@ const DarkModeToggle = () => {
       <style>
         {`
             /* Light Mode Styles */
-            body, button {
+            body{
               background-color: #f0f0f0;
-              color: white;
+              color: #555;
             }
   
             button {
@@ -54,10 +54,14 @@ const DarkModeToggle = () => {
             body.dark-mode button {
               background-color: #555;
               color: #fff;
+            }
             
+            /* Additional Styles for Black Background */
+            body.dark-mode .black-bg {
+              background-color: #000;
+              color: #fff;
             }
 
-            }
           `}
       </style>
     </div>

@@ -83,14 +83,14 @@ function App() {
   const totalPoints = questions.reduce((acc, cur) => acc + cur.points, 0);
   useEffect(function () {
     fetch("http://localhost:8000/questions")
-      .then((res) => res.json(null))
+      .then((res) => res.json())
       .then((data) => dispatch({ type: "dataFetched", payload: data }))
       .catch((err) => dispatch({ type: "fetchfailed" }));
   }, []);
 
   return (
     <div className="app">
-      <DarkModeToggle />
+      {/* <DarkModeToggle /> */}
       <Header />
       <Main>
         {status === "loading" && <Loader />}

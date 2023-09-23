@@ -257,3 +257,20 @@ progress {
   font-size: inherit;
   padding: 0.8rem;
 }
+/* Blinking Animation */
+@keyframes blink {
+  0% {
+    visibility: visible;
+  }
+  50% {
+    visibility: hidden;
+  }
+  100% {
+    visibility: visible;
+  }
+}
+
+/* Apply Blinking Animation to Timer */
+.timer-blink {
+  animation: blink 1s infinite; /* Adjust the duration as needed */
+}
